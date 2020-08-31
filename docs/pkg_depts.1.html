@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+<!-- This is an automatically generated file.  Do not edit.
+   Copyright (c) 2020 Matthias Pressfreund
+  
+   Permission to use, copy, modify, and distribute this software for any
+   purpose with or without fee is hereby granted, provided that the above
+   copyright notice and this permission notice appear in all copies.
+  
+   THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+   WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+   MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+   ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+   WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+   ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+   OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+   -->
+<head>
+  <meta charset="utf-8"/>
+  <link rel="stylesheet" href="mandoc.css" type="text/css" media="all"/>
+  <title>PKG_DEPTS(1)</title>
+</head>
+<body>
+<table class="head">
+  <tr>
+    <td class="head-ltitle">PKG_DEPTS(1)</td>
+    <td class="head-vol">General Commands Manual</td>
+    <td class="head-rtitle">PKG_DEPTS(1)</td>
+  </tr>
+</table>
+<div class="manual-text">
+<section class="Sh">
+<h1 class="Sh" id="NAME"><a class="permalink" href="#NAME">NAME</a></h1>
+<p class="Pp"><code class="Nm">pkg_depts</code> &#x2014; <span class="Nd">figure
+    out reverse package dependencies</span></p>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="SYNOPSIS"><a class="permalink" href="#SYNOPSIS">SYNOPSIS</a></h1>
+<table class="Nm">
+  <tr>
+    <td><code class="Nm">pkg_depts</code></td>
+    <td>[<code class="Fl">-t</code>] [<var class="Ar">pkg-name ...</var>]</td>
+  </tr>
+</table>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="DESCRIPTION"><a class="permalink" href="#DESCRIPTION">DESCRIPTION</a></h1>
+<p class="Pp"><code class="Nm">pkg_depts</code> determines package dependents,
+    i.e. which packages directly or indirectly depend on the package(s) in
+    question. The result will be printed to <var class="Ar">stdout</var>. First,
+    direct dependencies are determined by evaluating the
+    <code class="Dv">@depend</code> annotation returned by the
+    <a class="Xr" href="http://man.openbsd.org/pkg_info.1">pkg_info(1)</a>
+    command</p>
+<p class="Pp"></p>
+<div class="Bd Bd-indent"><code class="Li">pkg_info -f</code></div>
+<p class="Pp">for all packages installed on the system. After that, indirect
+    dependencies are discovered by recursively walking previously gathered
+    infomation until trapped in a loop or no further dependency exists.</p>
+<p class="Pp">The options are as follows:</p>
+<dl class="Bl-tag">
+  <dt id="t"><a class="permalink" href="#t"><code class="Fl">-t</code></a></dt>
+  <dd>Enables output of dependency trees.</dd>
+  <dt><var class="Ar">pkg-name</var></dt>
+  <dd>The name of a package to query either with or without trailing version
+      number. If given, the version must start with a number and
+      <var class="Ar">pkg-name</var> must be connected to that number by a
+      single dash character, as in <code class="Dv">php-7</code>, for example.
+      <code class="Nm">pkg_depts</code> matches version numbers of any kind and
+      size. Generally, fewer parts given will result in more packages being
+      found. For example, <code class="Dv">php-7</code> will match all
+      <code class="Dv">PHP 7</code> versions, while
+      <code class="Dv">php-7.4</code> will filter for <code class="Dv">PHP
+      7.4</code> only.</dd>
+</dl>
+<p class="Pp">If called without parameters, <code class="Nm">pkg_depts</code>
+    will just walk through all installed packages and determine their direct
+    dependencies. As this information is required at every dependency inquiry
+    and remains the same as long as installed packages on the system do not
+    change, it is usually being redirected into a cache file so it may be reused
+    as input to <var class="Ar">stdin</var> later.</p>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="USAGE"><a class="permalink" href="#USAGE">USAGE</a></h1>
+<p class="Pp">As stated above, in order to avoid the discovery of direct
+    dependencies for every new inquiry, it is recommended to first let
+    <code class="Nm">pkg_depts</code> build a dependency cache and save the
+    result into a file (here <var class="Ar">pkg_depts.cache</var>):</p>
+<div class="Bd Pp Bd-indent">
+<pre>
+# pkg_depts &gt; pkg_depts.cache
+ImageMagick-6.9.10.86p0 ... ok
+argon2-20171227 ... ok
+bzip2-1.0.8 ... ok
+cairo-1.16.0 ... ok
+curl-7.69.1p1 ... ok
+djvulibre-3.5.27p6 ... ok
+fcgi-2.4.0p18 ... ok
+femail-1.0p1 ... ok
+femail-chroot-1.0p3 ... ok
+ .
+ .
+ .
+vmm-firmware-1.11.0p2 ... ok
+wget-1.20.3p3 ... ok
+xz-5.2.5 ... ok
+#
+</pre>
+</div>
+<p class="Pp">Now, we're ready to start our first inquiry (here for the
+    <var class="Ar">glib2</var> package) which will return a plain list of all
+    dependent packages.</p>
+<div class="Bd Pp Bd-indent">
+<pre>
+# pkg_depts glib2 &lt; pkg_depts.cache
+ImageMagick-6.9.10.86p0
+cairo-1.16.0
+djvulibre-3.5.27p6
+gdk-pixbuf-2.40.0p2
+gtk-update-icon-cache-3.24.20
+harfbuzz-2.6.5
+munin-server-2.0.59
+pango-1.44.7p0
+pecl74-imagick-3.4.4p0
+rrdtool-1.7.2
+rrdupdate-1.7.2
+shared-mime-info-1.15
+#
+</pre>
+</div>
+<p class="Pp">In case we're interested in the complete dependency tree, we just
+    add the <code class="Fl">-t</code> option:</p>
+<div class="Bd Pp Bd-indent">
+<pre>
+# pkg_depts -t glib2 &lt; pkg_depts.cache
+glib2-2.62.6 &lt;- cairo-1.16.0
+    cairo-1.16.0 &lt;- harfbuzz-2.6.5
+        harfbuzz-2.6.5 &lt;- pango-1.44.7p0
+            pango-1.44.7p0 &lt;- rrdtool-1.7.2
+                rrdtool-1.7.2 &lt;- munin-server-2.0.59
+glib2-2.62.6 &lt;- gdk-pixbuf-2.40.0p2
+    gdk-pixbuf-2.40.0p2 &lt;- gtk-update-icon-cache-3.24.20
+        gtk-update-icon-cache-3.24.20 &lt;- djvulibre-3.5.27p6
+            djvulibre-3.5.27p6 &lt;- ImageMagick-6.9.10.86p0
+                ImageMagick-6.9.10.86p0 &lt;- pecl74-imagick-3.4.4p0
+glib2-2.62.6 &lt;- pango-1.44.7p0
+    pango-1.44.7p0 &lt;- rrdtool-1.7.2
+        rrdtool-1.7.2 &lt;- munin-server-2.0.59
+glib2-2.62.6 &lt;- rrdtool-1.7.2
+    rrdtool-1.7.2 &lt;- munin-server-2.0.59
+glib2-2.62.6 &lt;- rrdupdate-1.7.2
+    rrdupdate-1.7.2 &lt;- rrdtool-1.7.2
+        rrdtool-1.7.2 &lt;- munin-server-2.0.59
+glib2-2.62.6 &lt;- shared-mime-info-1.15
+    shared-mime-info-1.15 &lt;- djvulibre-3.5.27p6
+        djvulibre-3.5.27p6 &lt;- ImageMagick-6.9.10.86p0
+            ImageMagick-6.9.10.86p0 &lt;- pecl74-imagick-3.4.4p0
+    shared-mime-info-1.15 &lt;- gdk-pixbuf-2.40.0p2
+        gdk-pixbuf-2.40.0p2 &lt;- gtk-update-icon-cache-3.24.20
+            gtk-update-icon-cache-3.24.20 &lt;- djvulibre-3.5.27p6
+                djvulibre-3.5.27p6 &lt;- ImageMagick-6.9.10.86p0
+                    ImageMagick-6.9.10.86p0 &lt;- pecl74-imagick-3.4.4p0
+#
+</pre>
+</div>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="EXIT_STATUS"><a class="permalink" href="#EXIT_STATUS">EXIT
+  STATUS</a></h1>
+<p class="Pp"><code class="Nm">pkg_depts</code> exits 0 on success and &gt;0 in
+    case and error occurred.</p>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="SEE_ALSO"><a class="permalink" href="#SEE_ALSO">SEE
+  ALSO</a></h1>
+<p class="Pp"><a class="Xr" href="http://man.openbsd.org/pkg_info.1">pkg_info(1)</a></p>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="HISTORY"><a class="permalink" href="#HISTORY">HISTORY</a></h1>
+<p class="Pp"><code class="Nm">pkg_depts</code> first appeared on
+    <a class="Lk" href="https://github.com/mpfr/pkg_depts/">GitHub</a> in
+    August, 2020.</p>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="AUTHORS"><a class="permalink" href="#AUTHORS">AUTHORS</a></h1>
+<p class="Pp"><code class="Nm">pkg_depts</code> was written by
+    <span class="An">Matthias Pressfreund</span>.</p>
+</section>
+</div>
+<table class="foot">
+  <tr>
+    <td class="foot-date">August 31, 2020</td>
+    <td class="foot-os">OpenBSD</td>
+  </tr>
+</table>
+</body>
+</html>

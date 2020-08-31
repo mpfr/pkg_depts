@@ -1,0 +1,173 @@
+.\"
+.\" Copyright (c) 2020 Matthias Pressfreund
+.\"
+.\" Permission to use, copy, modify, and distribute this software for any
+.\" purpose with or without fee is hereby granted, provided that the above
+.\" copyright notice and this permission notice appear in all copies.
+.\"
+.\" THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+.\" WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+.\" MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+.\" ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+.\" WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+.\" ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+.\" OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+.\"
+.Dd $Mdocdate: August 31 2020 $
+.Dt PKG_DEPTS 1
+.Os
+.Sh NAME
+.Nm pkg_depts
+.Nd figure out reverse package dependencies
+.Sh SYNOPSIS
+.Nm
+.Op Fl t
+.Op Ar pkg-name ...
+.Sh DESCRIPTION
+.Nm
+determines package dependents, i.e. which packages directly or indirectly
+depend on the package(s) in question.
+The result will be printed to
+.Ar stdout .
+First, direct dependencies are determined by evaluating the
+.Dv @depend
+annotation returned by the
+.Xr pkg_info 1
+command
+.Pp
+.Dl pkg_info -f
+.Pp
+for all packages installed on the system.
+After that, indirect dependencies are discovered by recursively walking
+previously gathered infomation until trapped in a loop or no further
+dependency exists.
+.Pp
+The options are as follows:
+.Bl -tag -width "pkg-name"
+.It Fl t
+Enables output of dependency trees.
+.It Ar pkg-name
+The name of a package to query either with or without trailing version number.
+If given, the version must start with a number and
+.Ar pkg-name
+must be connected to that number by a single dash character, as in
+.Dv php-7 ,
+for example.
+.Nm
+matches version numbers of any kind and size.
+Generally, fewer parts given will result in more packages being found.
+For example,
+.Dv php-7
+will match all
+.Dv PHP 7
+versions, while
+.Dv php-7.4
+will filter for
+.Dv PHP 7.4
+only.
+.El
+.Pp
+If called without parameters,
+.Nm
+will just walk through all installed packages and determine their direct
+dependencies.
+As this information is required at every dependency inquiry and remains the
+same as long as installed packages on the system do not change, it is usually
+being redirected into a cache file so it may be reused as input to
+.Ar stdin
+later.
+.Sh USAGE
+As stated above, in order to avoid the discovery of direct dependencies for
+every new inquiry, it is recommended to first let
+.Nm
+build a dependency cache and save the result into a file (here
+.Ar pkg_depts.cache Ns ):
+.Bd -literal -offset indent
+# pkg_depts > pkg_depts.cache
+ImageMagick-6.9.10.86p0 ... ok
+argon2-20171227 ... ok
+bzip2-1.0.8 ... ok
+cairo-1.16.0 ... ok
+curl-7.69.1p1 ... ok
+djvulibre-3.5.27p6 ... ok
+fcgi-2.4.0p18 ... ok
+femail-1.0p1 ... ok
+femail-chroot-1.0p3 ... ok
+ .
+ .
+ .
+vmm-firmware-1.11.0p2 ... ok
+wget-1.20.3p3 ... ok
+xz-5.2.5 ... ok
+#
+.Ed
+.Pp
+Now, we're ready to start our first inquiry (here for the
+.Ar glib2
+package) which will return a plain list of all dependent packages.
+.Bd -literal -offset indent
+# pkg_depts glib2 < pkg_depts.cache
+ImageMagick-6.9.10.86p0
+cairo-1.16.0
+djvulibre-3.5.27p6
+gdk-pixbuf-2.40.0p2
+gtk-update-icon-cache-3.24.20
+harfbuzz-2.6.5
+munin-server-2.0.59
+pango-1.44.7p0
+pecl74-imagick-3.4.4p0
+rrdtool-1.7.2
+rrdupdate-1.7.2
+shared-mime-info-1.15
+#
+.Ed
+.Pp
+In case we're interested in the complete dependency tree, we just add the
+.Fl t
+option:
+.Bd -literal -offset indent
+# pkg_depts -t glib2 < pkg_depts.cache
+glib2-2.62.6 <- cairo-1.16.0
+    cairo-1.16.0 <- harfbuzz-2.6.5
+        harfbuzz-2.6.5 <- pango-1.44.7p0
+            pango-1.44.7p0 <- rrdtool-1.7.2
+                rrdtool-1.7.2 <- munin-server-2.0.59
+glib2-2.62.6 <- gdk-pixbuf-2.40.0p2
+    gdk-pixbuf-2.40.0p2 <- gtk-update-icon-cache-3.24.20
+        gtk-update-icon-cache-3.24.20 <- djvulibre-3.5.27p6
+            djvulibre-3.5.27p6 <- ImageMagick-6.9.10.86p0
+                ImageMagick-6.9.10.86p0 <- pecl74-imagick-3.4.4p0
+glib2-2.62.6 <- pango-1.44.7p0
+    pango-1.44.7p0 <- rrdtool-1.7.2
+        rrdtool-1.7.2 <- munin-server-2.0.59
+glib2-2.62.6 <- rrdtool-1.7.2
+    rrdtool-1.7.2 <- munin-server-2.0.59
+glib2-2.62.6 <- rrdupdate-1.7.2
+    rrdupdate-1.7.2 <- rrdtool-1.7.2
+        rrdtool-1.7.2 <- munin-server-2.0.59
+glib2-2.62.6 <- shared-mime-info-1.15
+    shared-mime-info-1.15 <- djvulibre-3.5.27p6
+        djvulibre-3.5.27p6 <- ImageMagick-6.9.10.86p0
+            ImageMagick-6.9.10.86p0 <- pecl74-imagick-3.4.4p0
+    shared-mime-info-1.15 <- gdk-pixbuf-2.40.0p2
+        gdk-pixbuf-2.40.0p2 <- gtk-update-icon-cache-3.24.20
+            gtk-update-icon-cache-3.24.20 <- djvulibre-3.5.27p6
+                djvulibre-3.5.27p6 <- ImageMagick-6.9.10.86p0
+                    ImageMagick-6.9.10.86p0 <- pecl74-imagick-3.4.4p0
+#
+.Ed
+.Sh EXIT STATUS
+.Nm
+exits 0 on success and >0 in case and error occurred.
+.Sh SEE ALSO
+.Xr pkg_info 1
+.Sh HISTORY
+.Nm
+first appeared on
+.Lk https://github.com/mpfr/pkg_depts/ GitHub
+in August, 2020.
+.Sh AUTHORS
+.An -nosplit
+.Nm
+was written by
+.An Matthias Pressfreund .
