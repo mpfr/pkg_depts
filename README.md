@@ -22,25 +22,25 @@ $
 Get the sources downloaded and extracted.
 
 ```
-$ ftp -o - https://codeload.github.com/mpfr/pkg_depts/tar.gz/master | tar xzvf -
-pkg_depts-master
-pkg_depts-master/README.md
-pkg_depts-master/docs
-pkg_depts-master/docs/mandoc.css
-pkg_depts-master/docs/pkg_depts.1.html
-pkg_depts-master/src
-pkg_depts-master/src/Makefile
-pkg_depts-master/src/pkg_depts.1
-pkg_depts-master/src/pkg_depts.sh
+$ ftp -Vo - https://codeload.github.com/mpfr/pkg_depts/tar.gz/main | tar xzvf -
+pkg_depts-main
+pkg_depts-main/README.md
+pkg_depts-main/docs
+pkg_depts-main/docs/mandoc.css
+pkg_depts-main/docs/pkg_depts.1.html
+pkg_depts-main/src
+pkg_depts-main/src/Makefile
+pkg_depts-main/src/pkg_depts.1
+pkg_depts-main/src/pkg_depts.sh
 $
 ```
 
 Install tool and manpage.
 
 ```
-$ cd pkg_depts-master/src
+$ cd pkg_depts-main/src
 $ doas make install
-install -c -o root -g bin -m 555  /home/mpfr/pkg_depts-master/src/pkg_depts.sh ...
+install -c -o root -g bin -m 555  /home/mpfr/pkg_depts-main/src/pkg_depts.sh ...
 install -c -o root -g bin -m 444  pkg_depts.1 ...
 $
 ```

@@ -17,9 +17,9 @@
 
 find_dependents()
 {
-	local regex=$1
-	[[ -n $(echo ${regex} | egrep '\-[0-9]') ]] || regex="${regex}\-[0-9]"
-	echo ${cache} | egrep " ${regex}" | while read -r pkg dep; do
+	local _regex=$1
+	[[ -n $(echo ${_regex} | egrep '\-[0-9]') ]] || _regex=${_regex}\-[0-9]
+	echo ${cache} | egrep " ${_regex}" | while read -r pkg dep; do
 		printf "%${indent}s"
 		echo "${dep} <- ${pkg}"
 		if [[ ${known#*${pkg} ${dep}} = ${known} ]]; then
@@ -67,6 +67,6 @@ for arg do
 		[[ -n ${dep} ]] && deplist="${deplist}${dep}\n"
 	fi
 done
-[[ -n ${deplist} ]] && echo "${deplist%'\n'*}" | while read dep delim pkg; do
+[[ -n ${deplist} ]] && echo ${deplist%'\n'*} | while read dep delim pkg; do
 	echo ${pkg}
 done | sort | uniq
