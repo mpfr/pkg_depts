@@ -1,13 +1,13 @@
 
-MAN=    pkg_depts.1
+MAN=		pkg_depts.1
 
-SCRIPT= pkg_depts.sh
+SCRIPT=		pkg_depts
 
 BINDIR?=	/usr/local/sbin
 MANDIR?=	/usr/local/man/man
 
 realinstall:
 	${INSTALL} ${INSTALL_COPY} -o ${BINOWN} -g ${BINGRP} -m ${BINMODE} \
-		${.CURDIR}/${SCRIPT} ${DESTDIR}${BINDIR}/pkg_depts
+		${.CURDIR}/${SCRIPT}.sh ${DESTDIR}${BINDIR}/${SCRIPT}
 
 .include <bsd.prog.mk>
