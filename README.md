@@ -2,9 +2,12 @@
 
 Figures out which [OpenBSD](https://www.openbsd.org) packages directly or indirectly depend on the package(s) in question.
 
-For more information, just have a look at the [manpage](https://mpfr.github.io/pkg_depts/pkg_depts.1.html).
+For further information, please have a look at the [manpage](https://mpfr.github.io/pkg_depts/pkg_depts.1.html).
 
 > Note: Only installed packages will be considered.
+
+Other branches available:
+* [6.7-stable](https://github.com/mpfr/pkg_depts/tree/6.7-stable)
 
 ## How to install
 
@@ -21,26 +24,26 @@ $ pwd
 Get the sources downloaded and extracted.
 
 ```
-$ rm -rf pkg_depts-main/
-$ ftp -Vo - https://codeload.github.com/mpfr/pkg_depts/tar.gz/main | tar xzvf -
-pkg_depts-main
-pkg_depts-main/LICENSE
-pkg_depts-main/README.md
-pkg_depts-main/docs
-pkg_depts-main/docs/mandoc.css
-pkg_depts-main/docs/pkg_depts.1.html
-pkg_depts-main/src
-pkg_depts-main/src/Makefile
-pkg_depts-main/src/pkg_depts.1
-pkg_depts-main/src/pkg_depts.sh
+$ rm -rf pkg_depts-current/
+$ ftp -Vo - https://codeload.github.com/mpfr/pkg_depts/tar.gz/current | tar xzvf -
+pkg_depts-current
+pkg_depts-current/LICENSE
+pkg_depts-current/README.md
+pkg_depts-current/docs
+pkg_depts-current/docs/mandoc.css
+pkg_depts-current/docs/pkg_depts.1.html
+pkg_depts-current/src
+pkg_depts-current/src/Makefile
+pkg_depts-current/src/pkg_depts.1
+pkg_depts-current/src/pkg_depts.sh
 ```
 
 Install tool and manpage.
 
 ```
-$ cd pkg_depts-main/src
+$ cd pkg_depts-current/src
 $ doas make install
-install -c -o root -g bin -m 555  /home/mpfr/pkg_depts-main/src/pkg_depts.sh ...
+install -c -o root -g bin -m 555  /home/mpfr/pkg_depts-current/src/pkg_depts.sh ...
 install -c -o root -g bin -m 444  pkg_depts.1 ...
 ```
 
