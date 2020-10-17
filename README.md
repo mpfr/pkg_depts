@@ -6,10 +6,10 @@ For further information, please have a look at the [manpage](https://mpfr.github
 
 > Note: Only installed packages will be considered.
 
-Other branches available:
-* [6.7-stable](https://github.com/mpfr/pkg_depts/tree/6.7-stable)
-
 ## How to install
+
+Make sure you're running `OpenBSD-current`. Otherwise, one of the following branches might be more appropriate:
+* [6.7-stable](https://github.com/mpfr/pkg_depts/tree/6.7-stable)
 
 Make sure your user has sufficient `doas` permissions. To start, `cd` into the user's home directory, here `/home/mpfr`.
 
