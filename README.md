@@ -4,10 +4,10 @@ Figures out which [OpenBSD](https://www.openbsd.org) packages directly or indire
 
 > Note: Only installed packages will be considered.
 
-Other branches available:
-* [current](https://github.com/mpfr/pkg_depts/tree/current)
-
 ## How to install
+
+Make sure you're running `OpenBSD 6.7-stable`. Otherwise, one of the following branches might be more appropriate:
+* [current](https://github.com/mpfr/pkg_depts)
 
 Make sure your user has sufficient `doas` permissions. To start, `cd` into the user's home directory, here `/home/mpfr`.
 
