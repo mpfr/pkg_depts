@@ -8,6 +8,7 @@ Figures out which [OpenBSD](https://www.openbsd.org) packages directly or indire
 
 Make sure you're running `OpenBSD 6.7-stable`. Otherwise, one of the following branches might be more appropriate:
 * [current](https://github.com/mpfr/pkg_depts)
+* [6.8-stable](https://github.com/mpfr/pkg_depts/tree/6.8-stable)
 
 Make sure your user has sufficient `doas` permissions. To start, `cd` into the user's home directory, here `/home/mpfr`.
 
