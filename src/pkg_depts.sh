@@ -67,6 +67,6 @@ for arg do
 		[[ -n ${dep} ]] && deplist="${deplist}${dep}\n"
 	fi
 done
-[[ -n ${deplist} ]] && echo ${deplist%'\n'*} | while read dep delim pkg; do
+[[ -n ${deplist} ]] && echo "${deplist%'\n'*}" | while read dep delim pkg; do
 	echo ${pkg}
 done | sort | uniq
