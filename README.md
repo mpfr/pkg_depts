@@ -10,20 +10,20 @@ Make sure you're running `OpenBSD 6.7-stable`. Otherwise, one of the following b
 * [current](https://github.com/mpfr/pkg_depts)
 * [6.8-stable](https://github.com/mpfr/pkg_depts/tree/6.8-stable)
 
-Make sure your user has sufficient `doas` permissions. To start, `cd` into the user's home directory, here `/home/mpfr`.
+Then, make sure your user (e.g. `mpfr`) has sufficient `doas` permissions.
 
 ```
 $ cat /etc/doas.conf
 permit nopass mpfr
+```
+
+Download and extract the source files into the user's home directory, here `/home/mpfr`.
+
+```
 $ cd
 $ pwd
 /home/mpfr
-```
-
-Get the sources downloaded and extracted.
-
-```
-$ rm -rf pkg_depts-6.7-stable/
+$ doas rm -rf pkg_depts-6.7-stable/
 $ ftp -Vo - https://codeload.github.com/mpfr/pkg_depts/tar.gz/6.7-stable | tar xzvf -
 pkg_depts-6.7-stable
 pkg_depts-6.7-stable/LICENSE
@@ -51,6 +51,7 @@ Besides on the console, the manpage is also available by pointing your browser t
 ## How to uninstall
 
 ```
-$ doas rm /usr/local/man/man1/pkg_depts.1
-$ doas rm /usr/local/sbin/pkg_depts
+$ cd pkg_depts-6.7-stable/src
+$ doas make uninstall
+rm /usr/local/sbin/pkg_depts /usr/local/man/man1/pkg_depts.1
 ```
