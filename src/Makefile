@@ -10,4 +10,7 @@ realinstall:
 	${INSTALL} ${INSTALL_COPY} -o ${BINOWN} -g ${BINGRP} -m ${BINMODE} \
 		${.CURDIR}/${SCRIPT}.sh ${DESTDIR}${BINDIR}/${SCRIPT}
 
+uninstall:
+	-rm ${BINDIR}/${SCRIPT} ${MANDIR}/${MAN}
+
 .include <bsd.prog.mk>
