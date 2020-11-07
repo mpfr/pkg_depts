@@ -8,24 +8,24 @@ For further information, please have a look at the [manpage](https://mpfr.github
 
 ## How to install
 
-Make sure you're running `OpenBSD-current`. Otherwise, one of the following branches might be more appropriate:
+First of all, make sure you're running `OpenBSD-current`. Otherwise, one of the following branches might be more appropriate:
 * [6.8-stable](https://github.com/mpfr/pkg_depts/tree/6.8-stable)
 * [6.7-stable](https://github.com/mpfr/pkg_depts/tree/6.7-stable)
 
-Make sure your user has sufficient `doas` permissions. To start, `cd` into the user's home directory, here `/home/mpfr`.
+Then, make sure your user (e.g. `mpfr`) has sufficient `doas` permissions.
 
 ```
 $ cat /etc/doas.conf
 permit nopass mpfr
+```
+
+Download and extract the source files into the user's home directory, here `/home/mpfr`.
+
+```
 $ cd
 $ pwd
 /home/mpfr
-```
-
-Get the sources downloaded and extracted.
-
-```
-$ rm -rf pkg_depts-current/
+$ doas rm -rf pkg_depts-current/
 $ ftp -Vo - https://codeload.github.com/mpfr/pkg_depts/tar.gz/current | tar xzvf -
 pkg_depts-current
 pkg_depts-current/LICENSE
@@ -51,6 +51,7 @@ install -c -o root -g bin -m 444  pkg_depts.1 ...
 ## How to uninstall
 
 ```
-$ doas rm /usr/local/man/man1/pkg_depts.1
-$ doas rm /usr/local/sbin/pkg_depts
+$ cd ~/pkg_depts-current/src
+$ doas make uninstall
+rm /usr/local/sbin/pkg_depts /usr/local/man/man1/pkg_depts.1
 ```
