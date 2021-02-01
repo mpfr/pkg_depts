@@ -9,6 +9,8 @@ MANDIR?=	/usr/local/man/man
 realinstall:
 	${INSTALL} ${INSTALL_COPY} -o ${BINOWN} -g ${BINGRP} -m ${BINMODE} \
 		${.CURDIR}/${SCRIPT}.sh ${DESTDIR}${BINDIR}/${SCRIPT}
+	${INSTALL} ${INSTALL_COPY} -o ${BINOWN} -g ${BINGRP} -m ${BINMODE} \
+		${.CURDIR}/pkg_info_1 ${DESTDIR}${BINDIR}/
 
 uninstall:
 	-rm ${BINDIR}/${SCRIPT} ${MANDIR}/${MAN}
