@@ -13,6 +13,6 @@ realinstall:
 		${.CURDIR}/pkg_info_1 ${DESTDIR}${BINDIR}/
 
 uninstall:
-	-rm ${BINDIR}/${SCRIPT} ${MANDIR}/${MAN}
+	-rm ${BINDIR}/${SCRIPT} ${BINDIR}/pkg_info_1 ${MANDIR}1/${MAN}
 
 .include <bsd.prog.mk>
