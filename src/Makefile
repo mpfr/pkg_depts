@@ -11,6 +11,6 @@ realinstall:
 		${.CURDIR}/${SCRIPT}.sh ${DESTDIR}${BINDIR}/${SCRIPT}
 
 uninstall:
-	-rm ${BINDIR}/${SCRIPT} ${MANDIR}/${MAN}
+	-rm ${BINDIR}/${SCRIPT} ${MANDIR}1/${MAN}
 
 .include <bsd.prog.mk>
