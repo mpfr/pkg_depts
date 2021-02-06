@@ -37,7 +37,7 @@ pkg_depts-current/src
 pkg_depts-current/src/Makefile
 pkg_depts-current/src/pkg_depts.1
 pkg_depts-current/src/pkg_depts.sh
-pkg_depts-current/src/pkg_info_1
+pkg_depts-current/src/pkg_info_1.pl
 ```
 
 Install tool and manpage.
@@ -46,7 +46,7 @@ Install tool and manpage.
 $ cd pkg_depts-current/src
 $ doas make install
 install -c -o root -g bin -m 555  /home/mpfr/pkg_depts-current/src/pkg_depts.sh ...
-install -c -o root -g bin -m 555  /home/mpfr/pkg_depts-current/src/pkg_info_1 ...
+install -c -o root -g bin -m 555  /home/mpfr/pkg_depts-current/src/pkg_info_1...
 install -c -o root -g bin -m 444  pkg_depts.1 ...
 ```
 
