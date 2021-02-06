@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+#!/usr/bin/perl -X
 #
 # Copyright (c) 2021 Matthias Pressfreund
 #
@@ -16,7 +16,6 @@
 #
 
 use strict;
-use warnings;
 
 package OpenBSD::State;
 use OpenBSD::Error;

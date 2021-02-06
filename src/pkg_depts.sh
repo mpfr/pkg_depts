@@ -33,7 +33,7 @@ find_dependents()
 
 pkg_info()
 {
-	pkg_info_1 $@ 2>/dev/null
+	pkg_info_1 $@
 }
 
 TREE=false
