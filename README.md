@@ -5,6 +5,8 @@
 
 Figures out which [OpenBSD](https://www.openbsd.org) packages directly or indirectly depend on the package(s) in question.
 
+For further information, please have a look at the [manpage](https://mpfr.net/man/pkg_depts/6.7-stable/pkg_depts.1.html).
+
 > Note: Only installed packages will be considered.
 
 ## How to install
@@ -48,8 +50,6 @@ $ doas make install
 install -c -o root -g bin -m 555  /home/mpfr/pkg_depts-6.7-stable/src/pkg_depts.sh ...
 install -c -o root -g bin -m 444  pkg_depts.1 ...
 ```
-
-Besides on the console, the manpage is also available by pointing your browser to `pkg_depts-6.7-stable/docs/pkg_depts.1.html`.
 
 ## How to uninstall
 
