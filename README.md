@@ -2,7 +2,7 @@
 
 Figures out which [OpenBSD](https://www.openbsd.org) packages directly or indirectly depend on the package(s) in question.
 
-For further information, please have a look at the [manpage](https://mpfr.github.io/pkg_depts/pkg_depts.1.html).
+For further information, please have a look at the [manpage](https://mpfr.net/man/pkg_depts/current/pkg_depts.1.html).
 
 > Note: Only installed packages will be considered.
 
@@ -31,7 +31,6 @@ pkg_depts-current
 pkg_depts-current/LICENSE
 pkg_depts-current/README.md
 pkg_depts-current/docs
-pkg_depts-current/docs/mandoc.css
 pkg_depts-current/docs/pkg_depts.1.html
 pkg_depts-current/src
 pkg_depts-current/src/Makefile
