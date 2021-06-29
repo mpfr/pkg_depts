@@ -31,7 +31,6 @@ pkg_depts-6.9-stable
 pkg_depts-6.9-stable/LICENSE
 pkg_depts-6.9-stable/README.md
 pkg_depts-6.9-stable/docs
-pkg_depts-6.9-stable/docs/mandoc.css
 pkg_depts-6.9-stable/docs/pkg_depts.1.html
 pkg_depts-6.9-stable/src
 pkg_depts-6.9-stable/src/Makefile
