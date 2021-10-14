@@ -10,7 +10,7 @@ For further information, please have a look at the [manpage](https://mpfr.net/ma
 
 First of all, make sure you're running `OpenBSD 6.9-stable`. Otherwise, one of the following branches might be more appropriate:
 * [current](https://github.com/mpfr/pkg_depts)
-* [6.8-stable](https://github.com/mpfr/pkg_depts/tree/6.8-stable)
+* [7.0-stable](https://github.com/mpfr/pkg_depts/tree/7.0-stable)
 
 Then, make sure your user (e.g. `mpfr`) has sufficient `doas` permissions.
 
