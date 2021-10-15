@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <!-- This is an automatically generated file.  Do not edit.
-   Copyright (c) 2020 Matthias Pressfreund
+   Copyright (c) 2020, 2021 Matthias Pressfreund
   
    Permission to use, copy, modify, and distribute this software for any
    purpose with or without fee is hereby granted, provided that the above
@@ -86,9 +86,8 @@
     dependencies for every new inquiry, it is recommended to first let
     <code class="Nm">pkg_depts</code> build a dependency cache and save the
     result into a file (here <var class="Ar">pkg_depts.cache</var>):</p>
-<div class="Bd Pp Bd-indent">
-<pre>
-# pkg_depts &gt; pkg_depts.cache
+<div class="Bd Pp Bd-indent Li">
+<pre># pkg_depts &gt; pkg_depts.cache
 ImageMagick-6.9.10.86p0 ... ok
 argon2-20171227 ... ok
 bzip2-1.0.8 ... ok
@@ -103,15 +102,13 @@ femail-chroot-1.0p3 ... ok
  .
 vmm-firmware-1.11.0p2 ... ok
 wget-1.20.3p3 ... ok
-xz-5.2.5 ... ok
-</pre>
+xz-5.2.5 ... ok</pre>
 </div>
 <p class="Pp">Now, we're ready to start our first inquiry (here for the
     <var class="Ar">glib2</var> package) which will return a plain list of all
     dependent packages.</p>
-<div class="Bd Pp Bd-indent">
-<pre>
-# pkg_depts glib2 &lt; pkg_depts.cache
+<div class="Bd Pp Bd-indent Li">
+<pre># pkg_depts glib2 &lt; pkg_depts.cache
 ImageMagick-6.9.10.86p0
 cairo-1.16.0
 djvulibre-3.5.27p6
@@ -123,14 +120,12 @@ pango-1.44.7p0
 pecl74-imagick-3.4.4p0
 rrdtool-1.7.2
 rrdupdate-1.7.2
-shared-mime-info-1.15
-</pre>
+shared-mime-info-1.15</pre>
 </div>
 <p class="Pp">In case we're interested in the complete dependency tree, we just
     add the <code class="Fl">-t</code> option:</p>
-<div class="Bd Pp Bd-indent">
-<pre>
-# pkg_depts -t glib2 &lt; pkg_depts.cache
+<div class="Bd Pp Bd-indent Li">
+<pre># pkg_depts -t glib2 &lt; pkg_depts.cache
 glib2-2.62.6 &lt;- cairo-1.16.0
     cairo-1.16.0 &lt;- harfbuzz-2.6.5
         harfbuzz-2.6.5 &lt;- pango-1.44.7p0
@@ -157,15 +152,14 @@ glib2-2.62.6 &lt;- shared-mime-info-1.15
         gdk-pixbuf-2.40.0p2 &lt;- gtk-update-icon-cache-3.24.20
             gtk-update-icon-cache-3.24.20 &lt;- djvulibre-3.5.27p6
                 djvulibre-3.5.27p6 &lt;- ImageMagick-6.9.10.86p0
-                    ImageMagick-6.9.10.86p0 &lt;- pecl74-imagick-3.4.4p0
-</pre>
+                    ImageMagick-6.9.10.86p0 &lt;- pecl74-imagick-3.4.4p0</pre>
 </div>
 </section>
 <section class="Sh">
 <h1 class="Sh" id="EXIT_STATUS"><a class="permalink" href="#EXIT_STATUS">EXIT
   STATUS</a></h1>
 <p class="Pp"><code class="Nm">pkg_depts</code> exits 0 on success and &gt;0 in
-    case and error occurred.</p>
+    case an error occurred.</p>
 </section>
 <section class="Sh">
 <h1 class="Sh" id="SEE_ALSO"><a class="permalink" href="#SEE_ALSO">SEE
@@ -186,7 +180,7 @@ glib2-2.62.6 &lt;- shared-mime-info-1.15
 </div>
 <table class="foot">
   <tr>
-    <td class="foot-date">October 8, 2020</td>
+    <td class="foot-date">October 15, 2021</td>
     <td class="foot-os">OpenBSD</td>
   </tr>
 </table>
