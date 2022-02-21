@@ -1,3 +1,6 @@
+| :warning: With the release of OpenBSD version 7.1, this branch will reach its end of life and will no longer be maintained.
+| --- |
+
 # pkg_depts
 
 Figures out which [OpenBSD](https://www.openbsd.org) packages directly or indirectly depend on the package(s) in question.
