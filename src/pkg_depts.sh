@@ -1,6 +1,6 @@
 #!/bin/ksh
 #
-# Copyright (c) 2020, 2021 Matthias Pressfreund
+# Copyright (c) 2020 - 2022 Matthias Pressfreund
 #
 # Permission to use, copy, modify, and distribute this software for any
 # purpose with or without fee is hereby granted, provided that the above
@@ -15,13 +15,20 @@
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #
 
+min_version()
+{
+	echo $1 | egrep -o "${vregex}"
+}
+
 find_dependents()
 {
 	local _regex=$1
-	[[ -n $(echo ${_regex} | egrep '\-[0-9]') ]] || _regex=${_regex}\-[0-9]
+	[[ -n ${vregex} ]] || vregex="^.*\-[0-9]+(\.[0-9]+){0,$(echo $1 | \
+	    awk -F. '{print NF-1}')}"
 	echo ${cache} | egrep " ${_regex}" | while read -r pkg dep; do
-		printf "%${indent}s"
-		echo "${dep} <- ${pkg}"
+		printf "%${indent}s%s <- %s\n" '' ${dep} ${pkg}
+		dep=$(min_version ${dep})
+		pkg=$(min_version ${pkg})
 		if [[ ${known#*${pkg} ${dep}} = ${known} ]]; then
 			known="${known}${pkg} ${dep}\n"
 			indent=$((indent+4))
