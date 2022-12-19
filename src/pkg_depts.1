@@ -1,5 +1,5 @@
 .\"
-.\" Copyright (c) 2020, 2021 Matthias Pressfreund
+.\" Copyright (c) 2020 - 2022 Matthias Pressfreund
 .\"
 .\" Permission to use, copy, modify, and distribute this software for any
 .\" purpose with or without fee is hereby granted, provided that the above
@@ -13,7 +13,7 @@
 .\" ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 .\" OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 .\"
-.Dd $Mdocdate: October 15 2021 $
+.Dd $Mdocdate: December 19 2022 $
 .Dt PKG_DEPTS 1
 .Os
 .Sh NAME
@@ -21,6 +21,7 @@
 .Nd figure out reverse package dependencies
 .Sh SYNOPSIS
 .Nm
+.Op Fl m Ar number
 .Op Fl t
 .Op Ar pkg-name ...
 .Sh DESCRIPTION
@@ -44,6 +45,11 @@ dependency exists.
 .Pp
 The options are as follows:
 .Bl -tag -width "pkg-name"
+.It Fl m Ar number
+Compares the given
+.Ar number
+of minor versions when walking dependencies.
+Defaults to 1.
 .It Fl t
 Enables output of dependency trees.
 .It Ar pkg-name
@@ -83,75 +89,85 @@ every new inquiry, it is recommended to first let
 build a dependency cache and save the result into a file (here
 .Ar pkg_depts.cache Ns ):
 .Bd -literal -offset indent
-# pkg_depts > pkg_depts.cache
-ImageMagick-6.9.10.86p0 ... ok
-argon2-20171227 ... ok
-bzip2-1.0.8 ... ok
-cairo-1.16.0 ... ok
-curl-7.69.1p1 ... ok
-djvulibre-3.5.27p6 ... ok
+# pkg_depts >pkg_depts.cache
+ImageMagick-6.9.12.63 ... ok
+aom-3.4.0 ... ok
+argon2-20190702 ... ok
+bzip2-1.0.8p0 ... ok
+cairo-1.17.6 ... ok
+curl-7.86.0p0 ... ok
+dav1d-1.0.0 ... ok
+djvulibre-3.5.28p0 ... ok
 fcgi-2.4.0p18 ... ok
-femail-1.0p1 ... ok
-femail-chroot-1.0p3 ... ok
  .
  .
  .
-vmm-firmware-1.11.0p2 ... ok
-wget-1.20.3p3 ... ok
-xz-5.2.5 ... ok
+x265-3.5p0 ... ok
+xz-5.2.5p2 ... ok
+zstd-1.5.2 ... ok
 .Ed
 .Pp
 Now, we're ready to start our first inquiry (here for the
 .Ar glib2
 package) which will return a plain list of all dependent packages.
 .Bd -literal -offset indent
-# pkg_depts glib2 < pkg_depts.cache
-ImageMagick-6.9.10.86p0
-cairo-1.16.0
-djvulibre-3.5.27p6
-gdk-pixbuf-2.40.0p2
-gtk-update-icon-cache-3.24.20
-harfbuzz-2.6.5
-munin-server-2.0.59
-pango-1.44.7p0
-pecl74-imagick-3.4.4p0
-rrdtool-1.7.2
-rrdupdate-1.7.2
-shared-mime-info-1.15
+# pkg_depts glib2 <pkg_depts.cache
+ImageMagick-6.9.12.63
+cairo-1.17.6
+djvulibre-3.5.28p0
+gdk-pixbuf-2.42.9p0
+gtk-update-icon-cache-3.24.34
+harfbuzz-5.2.0
+libheif-1.13.0
+munin-server-2.0.69p0
+pango-1.50.10
+pecl74-imagick-3.7.0p1
+rrdtool-1.7.2p1
+rrdupdate-1.7.2p1
+shared-mime-info-2.2
 .Ed
 .Pp
 In case we're interested in the complete dependency tree, we just add the
 .Fl t
 option:
 .Bd -literal -offset indent
-# pkg_depts -t glib2 < pkg_depts.cache
-glib2-2.62.6 <- cairo-1.16.0
-    cairo-1.16.0 <- harfbuzz-2.6.5
-        harfbuzz-2.6.5 <- pango-1.44.7p0
-            pango-1.44.7p0 <- rrdtool-1.7.2
-                rrdtool-1.7.2 <- munin-server-2.0.59
-glib2-2.62.6 <- gdk-pixbuf-2.40.0p2
-    gdk-pixbuf-2.40.0p2 <- gtk-update-icon-cache-3.24.20
-        gtk-update-icon-cache-3.24.20 <- djvulibre-3.5.27p6
-            djvulibre-3.5.27p6 <- ImageMagick-6.9.10.86p0
-                ImageMagick-6.9.10.86p0 <- pecl74-imagick-3.4.4p0
-glib2-2.62.6 <- pango-1.44.7p0
-    pango-1.44.7p0 <- rrdtool-1.7.2
-        rrdtool-1.7.2 <- munin-server-2.0.59
-glib2-2.62.6 <- rrdtool-1.7.2
-    rrdtool-1.7.2 <- munin-server-2.0.59
-glib2-2.62.6 <- rrdupdate-1.7.2
-    rrdupdate-1.7.2 <- rrdtool-1.7.2
-        rrdtool-1.7.2 <- munin-server-2.0.59
-glib2-2.62.6 <- shared-mime-info-1.15
-    shared-mime-info-1.15 <- djvulibre-3.5.27p6
-        djvulibre-3.5.27p6 <- ImageMagick-6.9.10.86p0
-            ImageMagick-6.9.10.86p0 <- pecl74-imagick-3.4.4p0
-    shared-mime-info-1.15 <- gdk-pixbuf-2.40.0p2
-        gdk-pixbuf-2.40.0p2 <- gtk-update-icon-cache-3.24.20
-            gtk-update-icon-cache-3.24.20 <- djvulibre-3.5.27p6
-                djvulibre-3.5.27p6 <- ImageMagick-6.9.10.86p0
-                    ImageMagick-6.9.10.86p0 <- pecl74-imagick-3.4.4p0
+# pkg_depts -t glib2 <pkg_depts.cache
+glib2-2.72.4 <- cairo-1.17.6
+    cairo-1.17.6 <- harfbuzz-5.2.0
+        harfbuzz-5.2.0 <- pango-1.50.10
+            pango-1.50.10 <- rrdtool-1.7.2p1
+                rrdtool-1.7.2p1 <- munin-server-2.0.69p0
+glib2-2.72.4 <- gdk-pixbuf-2.42.9p0
+    gdk-pixbuf-2.42.9 <- gtk-update-icon-cache-3.24.34
+        gtk-update-icon-cache-3.24.34 <- djvulibre-3.5.28p0
+            djvulibre-3.5.28p0 <- ImageMagick-6.9.12.63
+                ImageMagick-6.9.12.63 <- pecl74-imagick-3.7.0p1
+    gdk-pixbuf-2.42.9 <- libheif-1.13.0
+        libheif-1.13.0 <- ImageMagick-6.9.12.63
+            ImageMagick-6.9.12.63 <- pecl74-imagick-3.7.0p1
+glib2-2.72.4 <- pango-1.50.10
+    pango-1.50.10 <- rrdtool-1.7.2p1
+        rrdtool-1.7.2p1 <- munin-server-2.0.69p0
+glib2-2.72.4 <- rrdtool-1.7.2p1
+    rrdtool-1.7.2p1 <- munin-server-2.0.69p0
+glib2-2.72.4 <- rrdupdate-1.7.2p1
+    rrdupdate-1.7.2p1 <- rrdtool-1.7.2p1
+        rrdtool-1.7.2p1 <- munin-server-2.0.69p0
+glib2-2.72.4 <- shared-mime-info-2.2
+    shared-mime-info-2.2 <- djvulibre-3.5.28p0
+        djvulibre-3.5.28p0 <- ImageMagick-6.9.12.63
+            ImageMagick-6.9.12.63 <- pecl74-imagick-3.7.0p1
+    shared-mime-info-2.2 <- gdk-pixbuf-2.42.9p0
+        gdk-pixbuf-2.42.9 <- gtk-update-icon-cache-3.24.34
+            gtk-update-icon-cache-3.24.34 <- djvulibre-3.5.28p0
+                djvulibre-3.5.28p0 <- ImageMagick-6.9.12.63
+                    ImageMagick-6.9.12.63 <- pecl74-imagick-3.7.0p1
+        gdk-pixbuf-2.42.9 <- libheif-1.13.0
+            libheif-1.13.0 <- ImageMagick-6.9.12.63
+                ImageMagick-6.9.12.63 <- pecl74-imagick-3.7.0p1
+    shared-mime-info-2.2 <- libheif-1.13.0
+        libheif-1.13.0 <- ImageMagick-6.9.12.63
+            ImageMagick-6.9.12.63 <- pecl74-imagick-3.7.0p1
 .Ed
 .Sh EXIT STATUS
 .Nm
