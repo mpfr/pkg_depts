@@ -15,26 +15,38 @@
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #
 
-min_version()
+vrex='\-[0-9]+(\.[0-9]+)*(p[0-9]+)?(v[0-9]+)?$'
+
+get_name()
 {
-	echo $1 | egrep -o "${vregex}"
+	echo $1 | sed -E "s/${vrex}//" | sed "s/[.*?]/\\\&/g"
+}
+
+get_version()
+{
+	echo $1 | egrep -o "${vrex}"
+}
+
+min_package()
+{
+	echo $1 | egrep -o "^.*\-[0-9]+(\.[0-9]+){0,${MINORS}}"
 }
 
 find_dependents()
 {
-	local _regex=$1
-	[[ -n ${vregex} ]] || vregex="^.*\-[0-9]+(\.[0-9]+){0,$(echo $1 | \
-	    awk -F. '{print NF-1}')}"
-	echo ${cache} | egrep " ${_regex}" | while read -r pkg dep; do
-		printf "%${indent}s%s <- %s\n" '' ${dep} ${pkg}
-		dep=$(min_version ${dep})
-		pkg=$(min_version ${pkg})
-		if [[ ${known#*${pkg} ${dep}} = ${known} ]]; then
-			known="${known}${pkg} ${dep}\n"
-			indent=$((indent+4))
-			find_dependents ${pkg}
-		fi
-	done
+	local _name=$(get_name $1) _version=$(get_version $1) _pkg _dep
+	[[ -n ${_version} ]] || _version='\-[0-9]+'
+	echo ${cache} | egrep " ${_name}${_version}" | \
+		while read -r _pkg _dep; do
+			printf "%${indent}s%s <- %s\n" '' ${_dep} ${_pkg}
+			_pkg=$(min_package ${_pkg})
+			_dep=$(min_package ${_dep})
+			if [[ ${known#*${_pkg} ${_dep}} = ${known} ]]; then
+				known="${known}${_pkg} ${_dep}\n"
+				indent=$((indent+4))
+				find_dependents ${_pkg}
+			fi
+		done
 	indent=$((indent-4))
 }
 
@@ -44,14 +56,21 @@ pkg_info()
 }
 
 TREE=false
-while getopts t arg; do
+while getopts m:t arg; do
 	case ${arg} in
+	m)	MINORS=$OPTARG;;
 	t)	TREE=true;;
-	*)	echo "usage: ${0##*/} [-t] [pkg-name ...]" >&2
+	*)	echo "usage: ${0##*/} [-m <number>] [-t] [pkg-name ...]" >&2
 		exit 1;;
 	esac
 done
 shift $((OPTIND-1))
+
+[[ -n ${MINORS} ]] || MINORS=1
+if ! echo "${MINORS}" | grep -qE '^[0-9]+$'; then
+	echo "${0##*/}: invalid parameter" >&2
+	exit 1
+fi
 
 [[ -t 0 ]] || while read -r line; do
 	cache="${cache}${line}\n"
