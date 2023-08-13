@@ -66,7 +66,7 @@ while getopts m:t arg; do
 done
 shift $((OPTIND-1))
 
-[[ -n ${MINORS} ]] || MINORS=1
+[[ -n ${MINORS} ]] || MINORS=0
 if ! echo "${MINORS}" | grep -qE '^[0-9]+$'; then
 	echo "${0##*/}: invalid parameter" >&2
 	exit 1
