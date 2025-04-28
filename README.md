@@ -2,15 +2,15 @@
 
 Figures out which [OpenBSD](https://www.openbsd.org) packages directly or indirectly depend on the package(s) in question.
 
-For further information, please have a look at the [manpage](https://mpfr.net/man/pkg_depts/current/pkg_depts.1.html).
+For further information, please have a look at the [manpage](https://mpfr.net/man/pkg_depts/7.7-stable/pkg_depts.1.html).
 
 > Note: Only installed packages are considered.
 
 ## How to install
 
-First of all, make sure you're running `OpenBSD-current`. Otherwise, one of the following branches might be more appropriate:
+First of all, make sure you're running `OpenBSD 7.7-stable`. Otherwise, one of the following branches might be more appropriate:
+* [current](https://github.com/mpfr/pkg_depts)
 * [7.6-stable](https://github.com/mpfr/pkg_depts/tree/7.6-stable)
-* [7.5-stable](https://github.com/mpfr/pkg_depts/tree/7.5-stable)
 
 Then, make sure your user (e.g. `mpfr`) has sufficient `doas` permissions.
 
@@ -25,34 +25,34 @@ Download and extract the source files into the user's home directory, here `/hom
 $ cd
 $ pwd
 /home/mpfr
-$ doas rm -rf pkg_depts-current/
-$ ftp -Vo - https://codeload.github.com/mpfr/pkg_depts/tar.gz/current | tar xzvf -
-pkg_depts-current
-pkg_depts-current/LICENSE
-pkg_depts-current/README.md
-pkg_depts-current/docs
-pkg_depts-current/docs/pkg_depts.1.html
-pkg_depts-current/src
-pkg_depts-current/src/Makefile
-pkg_depts-current/src/pkg_depts.1
-pkg_depts-current/src/pkg_depts.sh
-pkg_depts-current/src/pkg_info_1.pl
+$ doas rm -rf pkg_depts-7.7-stable/
+$ ftp -Vo - https://codeload.github.com/mpfr/pkg_depts/tar.gz/7.7-stable | tar xzvf -
+pkg_depts-7.7-stable
+pkg_depts-7.7-stable/LICENSE
+pkg_depts-7.7-stable/README.md
+pkg_depts-7.7-stable/docs
+pkg_depts-7.7-stable/docs/pkg_depts.1.html
+pkg_depts-7.7-stable/src
+pkg_depts-7.7-stable/src/Makefile
+pkg_depts-7.7-stable/src/pkg_depts.1
+pkg_depts-7.7-stable/src/pkg_depts.sh
+pkg_depts-7.7-stable/src/pkg_info_1.pl
 ```
 
 Install tool and manpage.
 
 ```
-$ cd pkg_depts-current/src
+$ cd pkg_depts-7.7-stable/src
 $ doas make install
-install -c -o root -g bin -m 555  /home/mpfr/pkg_depts-current/src/pkg_depts.sh ...
-install -c -o root -g bin -m 555  /home/mpfr/pkg_depts-current/src/pkg_info_1...
+install -c -o root -g bin -m 555  /home/mpfr/pkg_depts-7.7-stable/src/pkg_depts.sh ...
+install -c -o root -g bin -m 555  /home/mpfr/pkg_depts-7.7-stable/src/pkg_info_1...
 install -c -o root -g bin -m 444  pkg_depts.1 ...
 ```
 
 ## How to uninstall
 
 ```
-$ cd ~/pkg_depts-current/src
+$ cd ~/pkg_depts-7.7-stable/src
 $ doas make uninstall
 rm /usr/local/sbin/pkg_depts /usr/local/sbin/pkg_info_1 /usr/local/man/man1/...
 ```
